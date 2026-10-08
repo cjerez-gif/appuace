@@ -1,3 +1,9 @@
+# --- HEADER PRINCIPAL ---
+st.title("🚀 STONKS | TERMINAL DE TRADING")
+2. Código Completo de app.py Actualizado
+Para que no tengas que buscar la línea exacta, aquí tienes todo el script listo para copiar y reemplazar en tu archivo:
+
+Python
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -293,3 +299,101 @@ col_t4.metric("ANTHROPIC", f"${st.session_state.precios_activos['Anthropic']:.2f
 
 # BARRA LATERAL
 with st.sidebar:
+    st.markdown("### ⚙️ CONTROL DE STONKS")
+    if st.button("🔄 REINICIAR SIMULACIÓN", use_container_width=True):
+        reiniciar_juego()
+        st.rerun()
+
+    st.markdown("---")
+    st.markdown("### 👥 MESAS DE TRADING")
+    num_equipos = st.slider("Cantidad de Equipos:", 1, 10, len(st.session_state.equipos))
+    
+    if num_equipos > len(st.session_state.equipos):
+        for i in range(1, num_equipos + 1):
+            if i not in st.session_state.equipos:
+                st.session_state.equipos[i] = {
+                    "nombre": f"Equipo {i}", "capital_actual": 100000.0, "historico_patrimonio": [100000.0], "historial_decisiones": []
+                }
+    elif num_equipos < len(st.session_state.equipos):
+        for i in list(st.session_state.equipos.keys()):
+            if i > num_equipos:
+                st.session_state.equipos.pop(i, None)
+                st.session_state.decisiones_etapa_actual.pop(i, None)
+
+    eq_sel = st.selectbox("Seleccionar Equipo:", options=list(st.session_state.equipos.keys()), format_func=lambda x: st.session_state.equipos[x]["nombre"])
+    nuevo_nombre = st.text_input("Cambiar Nombre:", key="input_nuevo_nombre")
+    if st.button("Guardar Nombre"):
+        if nuevo_nombre.strip():
+            st.session_state.equipos[eq_sel]["nombre"] = nuevo_nombre.strip()
+            st.rerun()
+
+st.pyplot(render_graficos())
+
+if st.session_state.etapa_actual > 5:
+    st.balloons()
+    st.subheader("🏆 TABLA DE POSICIONES FINALES - STONKS")
+    
+    res_data = []
+    for id_eq, eq in sorted(st.session_state.equipos.items(), key=lambda x: x[1]['capital_actual'], reverse=True):
+        rend = ((eq['capital_actual'] - 100000.0) / 100000.0) * 100
+        res_data.append({
+            "Equipo": eq["nombre"],
+            "Capital Inicial": "$100,000.00",
+            "Capital Final": f"${eq['capital_actual']:,.2f}",
+            "Rendimiento Total": f"{rend:+.2f}%"
+        })
+    st.table(pd.DataFrame(res_data))
+
+else:
+    config_etapa = ETAPAS_CONFIG[st.session_state.etapa_actual]
+    
+    st.markdown(f"### 📍 {config_etapa['titulo'].upper()}")
+    st.info(config_etapa["noticias"])
+
+    st.markdown("### 📑 CONFIGURAR PORTAFOLIO")
+    
+    c1, c2 = st.columns([1, 2.5])
+    with c1:
+        equipo_sel_id = st.selectbox(
+            "Equipo a Operar:",
+            options=list(st.session_state.equipos.keys()),
+            format_func=lambda x: st.session_state.equipos[x]["nombre"]
+        )
+
+    activos = config_etapa["activos_disponibles"]
+    valores_defecto = {}
+    if equipo_sel_id in st.session_state.decisiones_etapa_actual:
+        valores_defecto = st.session_state.decisiones_etapa_actual[equipo_sel_id]
+    elif st.session_state.equipos[equipo_sel_id]["historial_decisiones"]:
+        valores_defecto = st.session_state.equipos[equipo_sel_id]["historial_decisiones"][-1]["Pesos"]
+
+    pesos_input = {}
+    with c2:
+        cols = st.columns(len(activos))
+        for idx, activo in enumerate(activos):
+            val_init = valores_defecto.get(activo, 0)
+            pesos_input[activo] = cols[idx].number_input(
+                f"% {activo}", min_value=0, max_value=100, step=5, value=val_init, key=f"{equipo_sel_id}_{activo}"
+            )
+
+    suma_porcentajes = sum(pesos_input.values())
+    st.caption(f"**DISTRIBUCIÓN DEL PORTAFOLIO:** `{suma_porcentajes}%` / `100%`")
+
+    col_btn1, col_btn2 = st.columns(2)
+    with col_btn1:
+        if st.button("💾 CONFIRMAR PORTAFOLIO DEL EQUIPO", use_container_width=True):
+            if suma_porcentajes != 100:
+                st.error(f"❌ La suma de porcentajes debe ser exactamente 100%. Suma actual: {suma_porcentajes}%")
+            else:
+                st.session_state.decisiones_etapa_actual[equipo_sel_id] = pesos_input
+                st.success(f"✅ Portafolio guardado para: {st.session_state.equipos[equipo_sel_id]['nombre']}")
+
+    listos = [st.session_state.equipos[i]['nombre'] for i in st.session_state.decisiones_etapa_actual.keys()]
+    pendientes = [st.session_state.equipos[i]['nombre'] for i in st.session_state.equipos.keys() if i not in st.session_state.decisiones_etapa_actual]
+
+    st.markdown(f"**EQUIPOS LISTOS:** `{', '.join(listos) if listos else 'NINGUNO'}` | **PENDIENTES:** `{', '.join(pendientes) if pendientes else 'NINGUNO'}`")
+
+    st.markdown("---")
+    if st.button("🚀 AVANZAR A LA SIGUIENTE ETAPA", type="primary", use_container_width=True):
+        procesar_etapa()
+        st.rerun()
