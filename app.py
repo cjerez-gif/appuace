@@ -229,10 +229,60 @@ def reiniciar_juego():
     }
     st.session_state.decisiones_etapa_actual = {}
 
-# --- GRÁFICOS ESTILO CHART DE BOLSA ---
+# --- GENERADOR DE MOVIMIENTO / FLUCTUACIÓN REALISTA DE PRECIOS ---
+def generar_movimiento_continuo(valores_etapas, seed=42):
+    """ Genera puntos intermedios con ruido simétrico para imitar velas/gráficos de bolsa real """
+    np.random.seed(seed)
+    puntos_x = []
+    puntos_y = []
+    subpasos = 10  # 10 micro-movimientos entre etapa y etapa
+
+    if len(valores_etapas) == 1:
+        # Si estamos en E0, simulamos pequeñas oscilaciones alrededor del valor inicial
+        base = valores_etapas[0]
+        if np.isnan(base):
+            return [0], [np.nan]
+        puntos_x = np.linspace(0, 0.2, subpasos)
+        ruido = np.random.normal(0, 0.01, subpasos)
+        puntos_y = base * (1 + ruido)
+        puntos_y[0] = base
+        return puntos_x, puntos_y
+
+    for i in range(len(valores_etapas) - 1):
+        v_inicio = valores_etapas[i]
+        v_fin = valores_etapas[i + 1]
+
+        if np.isnan(v_inicio) and np.isnan(v_fin):
+            x_segmento = np.linspace(i, i + 1, subpasos)
+            y_segmento = [np.nan] * subpasos
+        elif np.isnan(v_inicio) and not np.isnan(v_fin):
+            x_segmento = np.linspace(i, i + 1, subpasos)
+            # Salida a bolsa repentina
+            y_segmento = np.linspace(v_fin * 0.8, v_fin, subpasos) + np.random.normal(0, v_fin * 0.02, subpasos)
+            y_segmento[-1] = v_fin
+        else:
+            x_segmento = np.linspace(i, i + 1, subpasos)
+            # Tendencia lineal + ruido sinusoidal para simular fluctuación bursátil
+            tendencia = np.linspace(v_inicio, v_fin, subpasos)
+            onda = np.sin(np.linspace(0, np.pi * 2, subpasos)) * (v_fin - v_inicio) * 0.15
+            ruido = np.random.normal(0, abs(v_fin - v_inicio) * 0.03 + 0.5, subpasos)
+            y_segmento = tendencia + onda + ruido
+            y_segmento[0] = v_inicio
+            y_segmento[-1] = v_fin
+
+        if i > 0:
+            x_segmento = x_segmento[1:]
+            y_segmento = y_segmento[1:]
+
+        puntos_x.extend(x_segmento)
+        puntos_y.extend(y_segmento)
+
+    return puntos_x, puntos_y
+
+# --- RENDERIZADO DE GRÁFICOS INTERACTIVOS ESTILO TRADING ---
 def render_graficos():
     plt.style.use('dark_background')
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.2))
     
     fig.patch.set_facecolor('#0b0e14')
     ax1.set_facecolor('#11151c')
@@ -240,42 +290,45 @@ def render_graficos():
 
     etapas = st.session_state.historico_precios["Etapa"]
 
-    p_openai = (np.array(st.session_state.historico_precios["OpenAI"]) / 100.0) * 100
-    p_oro = (np.array(st.session_state.historico_precios["Oro"]) / 2000.0) * 100
-    p_sp = (np.array(st.session_state.historico_precios["S&P 500"]) / 450.0) * 100
-    p_anthropic = (np.array(st.session_state.historico_precios["Anthropic"]) / 500.0) * 100
+    # Precios base 100
+    p_openai_raw = (np.array(st.session_state.historico_precios["OpenAI"]) / 100.0) * 100
+    p_oro_raw = (np.array(st.session_state.historico_precios["Oro"]) / 2000.0) * 100
+    p_sp_raw = (np.array(st.session_state.historico_precios["S&P 500"]) / 450.0) * 100
+    p_anthropic_raw = (np.array(st.session_state.historico_precios["Anthropic"]) / 500.0) * 100
 
-    ax1.plot(etapas, p_openai, color='#b388ff', linewidth=2.5, marker='o', label="OpenAI")
-    ax1.fill_between(etapas, p_openai, alpha=0.15, color='#b388ff')
+    # DIBUJAR ACTIVOS CON CURVAS CONTINUAS DE BOLSA
+    config_activos = [
+        ("OpenAI", p_openai_raw, '#b388ff', 101),
+        ("Oro", p_oro_raw, '#ffd700', 102),
+        ("S&P 500", p_sp_raw, '#00b0ff', 103),
+        ("Anthropic", p_anthropic_raw, '#ff5252', 104)
+    ]
 
-    ax1.plot(etapas, p_oro, color='#ffd700', linewidth=2.5, marker='o', label="Oro")
-    ax1.fill_between(etapas, p_oro, alpha=0.10, color='#ffd700')
+    for nombre, valores, color, seed in config_activos:
+        x_smooth, y_smooth = generar_movimiento_continuo(valores, seed=seed)
+        ax1.plot(x_smooth, y_smooth, color=color, linewidth=1.8, label=nombre)
+        ax1.fill_between(x_smooth, y_smooth, alpha=0.10, color=color)
 
-    ax1.plot(etapas, p_sp, color='#00b0ff', linewidth=2.5, marker='o', label="S&P 500")
-    ax1.fill_between(etapas, p_sp, alpha=0.15, color='#00b0ff')
-
-    ax1.plot(etapas, p_anthropic, color='#ff5252', linewidth=2.5, linestyle='--', marker='s', label="Anthropic")
-    ax1.fill_between(etapas, p_anthropic, alpha=0.15, color='#ff5252')
-
-    ax1.set_title("CHART DE RENDIMIENTO DE ACTIVOS (BASE 100)", fontsize=10, color='#00e676', fontweight='bold', pad=12)
-    ax1.grid(True, linestyle='--', alpha=0.2, color='#2a2e39')
+    ax1.set_title("CHART DE PRECIOS CONTINUOS (BASE 100)", fontsize=10, color='#00e676', fontweight='bold', pad=12)
+    ax1.grid(True, linestyle='--', alpha=0.18, color='#2a2e39')
     ax1.set_xticks(etapas)
     ax1.set_xticklabels([f"E{e}" for e in etapas])
     ax1.legend(facecolor='#151922', edgecolor='#2a2e39', fontsize=8, loc='upper left')
 
+    # DIBUJAR CURVAS DE CAPITAL DE LOS EQUIPOS
     colores_equipos = ['#00e676', '#ff9100', '#00b0ff', '#e040fb', '#ffd600', '#ff5252']
     for idx, (id_eq, eq) in enumerate(st.session_state.equipos.items()):
         c = colores_equipos[idx % len(colores_equipos)]
         patrimonio = eq["historico_patrimonio"]
-        x_axis = range(len(patrimonio))
+        x_smooth, y_smooth = generar_movimiento_continuo(patrimonio, seed=200 + id_eq)
         
-        ax2.plot(x_axis, patrimonio, marker='D', linewidth=2.5, label=eq["nombre"], color=c)
-        ax2.fill_between(x_axis, patrimonio, 100000, alpha=0.08, color=c)
+        ax2.plot(x_smooth, y_smooth, linewidth=2.0, label=eq["nombre"], color=c)
+        ax2.fill_between(x_smooth, y_smooth, 100000, alpha=0.08, color=c)
 
     ax2.axhline(y=100000, color='#787b86', linestyle=':', alpha=0.6, label="Cap. Base")
-    ax2.set_title("EVOLUCIÓN DE CAPITAL DE EQUIPOS (USD)", fontsize=10, color='#00e676', fontweight='bold', pad=12)
+    ax2.set_title("EVOLUCIÓN EN VIVO DEL CAPITAL (USD)", fontsize=10, color='#00e676', fontweight='bold', pad=12)
     ax2.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f"${x:,.0f}"))
-    ax2.grid(True, linestyle='--', alpha=0.2, color='#2a2e39')
+    ax2.grid(True, linestyle='--', alpha=0.18, color='#2a2e39')
     ax2.set_xticks(range(len(etapas)))
     ax2.set_xticklabels([f"E{e}" for e in etapas])
     ax2.legend(facecolor='#151922', edgecolor='#2a2e39', fontsize=8, loc='upper left')
