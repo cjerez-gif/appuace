@@ -1,7 +1,6 @@
 # --- HEADER PRINCIPAL ---
 st.title("🚀 STONKS | TERMINAL DE TRADING")
-2. Código Completo de app.py Actualizado
-Para que no tengas que buscar la línea exacta, aquí tienes todo el script listo para copiar y reemplazar en tu archivo:
+
 
 Python
 import streamlit as st
