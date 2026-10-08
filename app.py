@@ -57,7 +57,7 @@ st.markdown("""
         }
 
         .stAlert {
-            border-left: 4px solid #ff9100 !important;
+            border-left: 4px solid #00e676 !important;
         }
 
         .dataframe {
@@ -68,62 +68,56 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- NOTICIAS CLARAS Y AMIGABLES ---
+# --- NOTICIAS SUGERENTES Y EVENTOS SURREALISTAS (ESTILO BLUMBERG) ---
 ETAPAS_CONFIG = {
     1: {
-        "titulo": "Etapa 1: Subida de Tasas e Impulso Tecnológico",
         "noticias": (
-            "📰 NOTICIAS DEL MERCADO - ETAPA 1:\n"
-            "• 🏦 El Banco Central sube las tasas de interés para controlar la inflación, haciendo que guardar dinero rinda más.\n"
-            "• 📈 El S&P 500 se mantiene estable gracias a las ganancias sólidas de las grandes empresas.\n"
-            "• 🤖 OpenAI cierra un contrato gigante de Inteligencia Artificial y sus acciones se disparan."
+            "📺 NOTICIAS FINANCIERAS CON BLUMBERG\n\n"
+            "• 🏦 La Reserva Federal adopta una postura 'hawkish' ajustando liquidez en los bancos para frenar la inflación.\n"
+            "• 💼 Informes corporativos de consumo e industria muestran márgenes estables pero sin catalizadores de crecimiento.\n"
+            "• 🤖 Rumores de alianzas estratégicas en Silicon Valley anticipan el despliegue de infraestructura de IA de última generación."
         ),
         "activos_disponibles": ["OpenAI", "Oro", "S&P 500"],
         "rendimientos": {"OpenAI": 0.35, "Oro": -0.15, "S&P 500": 0.02}
     },
     2: {
-        "titulo": "Etapa 2: Miedo a la Recesión y Expectativa de IA",
         "noticias": (
-            "📰 NOTICIAS DEL MERCADO - ETAPA 2:\n"
-            "• ⚠️ Los analistas advierten sobre un posible estancamiento económico en los próximos meses.\n"
-            "• 🚀 Suenan fuertes rumores de que la empresa de IA 'Anthropic' saldrá pronto a la bolsa de valores.\n"
-            "• 💡 Los inversionistas prefieren apostar por la tecnología y vender su Oro para buscar mayores ganancias."
+            "📺 NOTICIAS FINANCIERAS CON BLUMBERG\n\n"
+            "• ⚠️ Curva de rendimiento de bonos del tesoro sugiere desaceleración en el crédito comercial e industrial.\n"
+            "• 🚀 Un laboratorio rival de modelos masivos de lenguaje contrata bancos de inversión para alistar su debut en bolsa.\n"
+            "• 📉 Salidas registradas de capital en bóvedas de resguardo físico hacia mercados de mayor volatilidad."
         ),
         "activos_disponibles": ["OpenAI", "Oro", "S&P 500"],
         "rendimientos": {"OpenAI": 0.20, "Oro": -0.05, "S&P 500": 0.08}
     },
     3: {
-        "titulo": "Etapa 3: ¡Anthropic Sale a Bolsa! (IPO)",
         "noticias": (
-            "📰 NOTICIAS DEL MERCADO - ETAPA 3:\n"
-            "🔥 ¡DEBUT HISTÓRICO! Anthropic ya cotiza en la bolsa y la fiebre de los inversionistas hace explotar su precio (+80%).\n"
-            "• 💸 Todo el mundo vende sus acciones tradicionales del S&P 500 para comprar Anthropic, provocando una caída en el índice.\n"
-            "• 📊 OpenAI sigue subiendo de forma moderada pero estable.\n"
-            "• 🟡 El Oro frena sus caídas y se mantiene congelado."
+            "📺 NOTICIAS FINANCIERAS CON BLUMBERG\n\n"
+            "🔔 APERTURA DE MERCADO: Anthropic debuta oficialmente en la bolsa de valores tras meses de especulación.\n"
+            "• 💸 Rotación institucional masiva: Administradores de fondos reequilibran posiciones vendiendo índices diversificados para acumular la nueva IPO.\n"
+            "• 📊 Empresas consolidadas del sector corporativo muestran volúmenes de transacción dentro de promedios históricos.\n"
+            "• 🟡 Mercado de metales preciosos registra baja liquidez y movimiento lateral."
         ),
         "activos_disponibles": ["OpenAI", "Oro", "S&P 500", "Anthropic"],
         "rendimientos": {"OpenAI": 0.05, "Oro": 0.00, "S&P 500": -0.12, "Anthropic": 0.80}
     },
     4: {
-        "titulo": "Etapa 4: Tensiones Internacionales y Refugio Financiero",
         "noticias": (
-            "📰 NOTICIAS DEL MERCADO - ETAPA 4:\n"
-            "• 🌍 Conflictos geopolíticos amenazan la fabricación de microchips para Inteligencia Artificial.\n"
-            "• 🤖 Pese a los problemas de suministros, la especulación vuelve a impulsar con fuerza a OpenAI y Anthropic.\n"
-            "• 🛡️ Ante la incertidumbre mundial, los inversionistas corren a protegerse comprando Oro (+15%).\n"
-            "• 📉 Las empresas del S&P 500 sufren por el aumento en costos de transporte."
+            "📺 NOTICIAS FINANCIERAS CON BLUMBERG\n\n"
+            "🚨 ÚLTIMA HORA | EVENTO CISNE NEGRO EN SECTOR DE DEFENSA:\n"
+            "• 🤖 Reportes de inteligencia confirman que un agente autónomo de IA instalado en un dron militar sufrió una falla lógica severa y atacó a las fuerzas aliadas dentro de un batallón.\n"
+            "• 💀 Gobiernos convocan a reuniones de emergencia para debatir regulaciones extremas e interrupciones operativas al sector tecnológico.\n"
+            "• 🛡️ Pánico generalizado en mercados internacionales; inversionistas buscan coberturas físicas de supervivencia e insumos primarios."
         ),
         "activos_disponibles": ["OpenAI", "Oro", "S&P 500", "Anthropic"],
         "rendimientos": {"OpenAI": 0.25, "Oro": 0.15, "S&P 500": -0.06, "Anthropic": 0.40}
     },
     5: {
-        "titulo": "Etapa 5: Estallido de la Burbuja de IA",
         "noticias": (
-            "📰 NOTICIAS DEL MERCADO - ETAPA 5:\n"
-            "💥 ¡SE ROMPE LA BURBUJA! Reportes revelan que la Inteligencia Artificial no está dando las ganancias prometidas.\n"
-            "• 🔴 Pánico total: Las acciones de OpenAI y Anthropic caen en picada (-55% y -65%).\n"
-            "• 🏆 El Oro se convierte en el gran ganador del año alcanzando un récord histórico (+30%).\n"
-            "• 🛡️ El S&P 500 amortigua la caída gracias a empresas estables de supermercados y energía."
+            "📺 NOTICIAS FINANCIERAS CON BLUMBERG\n\n"
+            "• 📊 Auditorías contables independientes revelan que los costos operativos de infraestructura superan por mucho los retornos reales por suscripción en firmas tech.\n"
+            "• 🔴 Fondos de cobertura reducen abruptamente la exposición en activos con ratios P/E desproporcionados.\n"
+            "• 🏛️ Sectores defensivos tradicionales y reservas tangibles reciben flujos en busca de preservación patrimonial."
         ),
         "activos_disponibles": ["OpenAI", "Oro", "S&P 500", "Anthropic"],
         "rendimientos": {"OpenAI": -0.55, "Oro": 0.30, "S&P 500": -0.02, "Anthropic": -0.65}
@@ -230,14 +224,12 @@ def reiniciar_juego():
 
 # --- GENERADOR DE MOVIMIENTO / FLUCTUACIÓN REALISTA DE PRECIOS ---
 def generar_movimiento_continuo(valores_etapas, seed=42):
-    """ Genera puntos intermedios con ruido simétrico para imitar velas/gráficos de bolsa real """
     np.random.seed(seed)
     puntos_x = []
     puntos_y = []
-    subpasos = 10  # 10 micro-movimientos entre etapa y etapa
+    subpasos = 10
 
     if len(valores_etapas) == 1:
-        # Si estamos en E0, simulamos pequeñas oscilaciones alrededor del valor inicial
         base = valores_etapas[0]
         if np.isnan(base):
             return [0], [np.nan]
@@ -256,12 +248,10 @@ def generar_movimiento_continuo(valores_etapas, seed=42):
             y_segmento = [np.nan] * subpasos
         elif np.isnan(v_inicio) and not np.isnan(v_fin):
             x_segmento = np.linspace(i, i + 1, subpasos)
-            # Salida a bolsa repentina
             y_segmento = np.linspace(v_fin * 0.8, v_fin, subpasos) + np.random.normal(0, v_fin * 0.02, subpasos)
             y_segmento[-1] = v_fin
         else:
             x_segmento = np.linspace(i, i + 1, subpasos)
-            # Tendencia lineal + ruido sinusoidal para simular fluctuación bursátil
             tendencia = np.linspace(v_inicio, v_fin, subpasos)
             onda = np.sin(np.linspace(0, np.pi * 2, subpasos)) * (v_fin - v_inicio) * 0.15
             ruido = np.random.normal(0, abs(v_fin - v_inicio) * 0.03 + 0.5, subpasos)
@@ -278,7 +268,7 @@ def generar_movimiento_continuo(valores_etapas, seed=42):
 
     return puntos_x, puntos_y
 
-# --- RENDERIZADO DE GRÁFICOS INTERACTIVOS ESTILO TRADING ---
+# --- RENDERIZADO DE GRÁFICOS ---
 def render_graficos():
     plt.style.use('dark_background')
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.2))
@@ -289,13 +279,11 @@ def render_graficos():
 
     etapas = st.session_state.historico_precios["Etapa"]
 
-    # Precios base 100
     p_openai_raw = (np.array(st.session_state.historico_precios["OpenAI"]) / 100.0) * 100
     p_oro_raw = (np.array(st.session_state.historico_precios["Oro"]) / 2000.0) * 100
     p_sp_raw = (np.array(st.session_state.historico_precios["S&P 500"]) / 450.0) * 100
     p_anthropic_raw = (np.array(st.session_state.historico_precios["Anthropic"]) / 500.0) * 100
 
-    # DIBUJAR ACTIVOS CON CURVAS CONTINUAS DE BOLSA
     config_activos = [
         ("OpenAI", p_openai_raw, '#b388ff', 101),
         ("Oro", p_oro_raw, '#ffd700', 102),
@@ -314,7 +302,6 @@ def render_graficos():
     ax1.set_xticklabels([f"E{e}" for e in etapas])
     ax1.legend(facecolor='#151922', edgecolor='#2a2e39', fontsize=8, loc='upper left')
 
-    # DIBUJAR CURVAS DE CAPITAL DE LOS EQUIPOS
     colores_equipos = ['#00e676', '#ff9100', '#00b0ff', '#e040fb', '#ffd600', '#ff5252']
     for idx, (id_eq, eq) in enumerate(st.session_state.equipos.items()):
         c = colores_equipos[idx % len(colores_equipos)]
@@ -394,7 +381,6 @@ if st.session_state.etapa_actual > 5:
 else:
     config_etapa = ETAPAS_CONFIG[st.session_state.etapa_actual]
     
-    st.markdown(f"### 📍 {config_etapa['titulo'].upper()}")
     st.info(config_etapa["noticias"])
 
     st.markdown("### 📑 CONFIGURAR PORTAFOLIO")
@@ -420,7 +406,7 @@ else:
         for idx, activo in enumerate(activos):
             val_init = valores_defecto.get(activo, 0)
             pesos_input[activo] = cols[idx].number_input(
-                f"% {activo}", min_value=0, max_value=100, step=5, value=val_init, key=f"{equipo_sel_id}_{activo}"
+                f"% {activo}", min_value=0, max_value=100, step=1, value=val_init, key=f"{equipo_sel_id}_{activo}"
             )
 
     suma_porcentajes = sum(pesos_input.values())
