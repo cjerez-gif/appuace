@@ -1,12 +1,11 @@
-# --- HEADER PRINCIPAL ---
-st.title("🚀 STONKS | TERMINAL DE TRADING")
-
-
 Python
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+# --- HEADER PRINCIPAL ---
+st.title("🚀 STONKS | TERMINAL DE TRADING")
 
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
