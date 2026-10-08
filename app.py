@@ -4,9 +4,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# --- HEADER PRINCIPAL ---
-st.title("🚀 STONKS | TERMINAL DE TRADING")
-
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
     page_title="Stonks 🚀 | Simulador de Inversiones",
