@@ -331,7 +331,7 @@ col_t4.metric("ANTHROPIC", f"${st.session_state.precios_activos['Anthropic']:.2f
 
 # BARRA LATERAL CON LOGO STONKS
 with st.sidebar:
-    st.image("https://i.kym-cdn.com/entries/icons/mobile/000/029/929/kCover.jpg", use_container_width=True)
+    st.image("stonks.jpeg", use_container_width=True)
     st.markdown("### ⚙️ CONTROL DE STONKS")
     if st.button("🔄 REINICIAR SIMULACIÓN", use_container_width=True):
         reiniciar_juego()
