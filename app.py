@@ -1,7 +1,7 @@
 etapa 1
 OpenAI lanza su modelo más avanzado y atrae a gigantes corporativos
 
-inflación estable en EE. UU. La Fed mantiene las tasas y Wall Street espera
+inflación estable en EE.UU La Fed mantiene las tasas y Wall Street espera
 
 Bancos centrales pausan sus compras de oro tras un acuerdo de alto al fuego
 
